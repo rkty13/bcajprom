@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAQ,2BAAgB;ACIrB,8CAAgB;EACf,MAAM,EAAE,IAAI",
+"sources": ["sass/styles.scss","sass/_navbar.scss"],
+"names": [],
+"file": "styles.css"
+}

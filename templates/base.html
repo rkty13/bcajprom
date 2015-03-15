@@ -1,0 +1,22 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="/static/css/styles.css">
+		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+		{% block header %}{% endblock %}
+	</head>
+	<body>
+		<nav>
+			<div class="pure-menu pure-menu-horizontal">
+				<a href="#" class="pure-menu-heading pure-menu-link">PURE</a>
+				<ul class="pure-menu-list">
+					<li class="pure-menu-item">
+						<a href="#" class="pure-menu-link">Home</a></li>
+					</li>
+				</ul>
+			</div>
+		<nav>
+		{% block body %}{% endblock %}
+	</body>
+
+	{% block scripts %}{% endblock %}
+</html>

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block body %}
+	<div class="container">
+		<form method="POST" action="/login">
+			<input type="text" name="email" placeholder="Bergen Email">
+			<input type="password" name="password" placeholder="Password">
+			<button type="submit">Log In</button>
+		</form>
+		<a href="/create_account"><button>Create Account</button></a>
+	</div>
+{% endblock %}
