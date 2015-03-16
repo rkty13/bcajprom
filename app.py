@@ -40,9 +40,6 @@ class User(object):
     def is_authenticated(self):
         return True
 
-    def is_anonymous(self):
-        return False
-
     def get_id(self):
         return unicode(self._id)
 
@@ -70,7 +67,8 @@ def login():
             login_user(User(unicode(user["_id"])))
             return redirect("/")
         else:
-            return render_template("login.html", 
+            return render_template(
+                "login.html", 
                 error="Wrong email or password")
     return render_template("login.html")
 
@@ -103,17 +101,21 @@ def create():
                 error="Please enter a valid email address")
 
         if users.find_one({ "email" : re.compile(request.form["email"], re.IGNORECASE) }) != None:
-            return render_template("create_account.html", 
+            return render_template(
+                "create_account.html", 
                 error="Account with email already exists")
         user["email"] = request.form["email"].lower()
         
         if not request.form["password"] == request.form["verify_password"]:
-            return render_template("create_account.html", 
+            return render_template(
+                "create_account.html", 
                 error="Password verification failed")
 
         user["password"] = hashPassword(request.form["password"])
         users.insert(user)
-        return render_template("create_account.html", success="User Created!")
+        return render_template(
+            "create_account.html", 
+            success="User Created!")
     return render_template("create_account.html")
 
 def hashPassword(password):
@@ -124,9 +126,13 @@ def list_tables():
     status = None
     if request.method == "POST":
         if request.form["status"] == "leave":
-            status = removeUserTable(current_user.name, ObjectId(request.form["id"]))
+            status = removeUserTable(
+                current_user.name, 
+                ObjectId(request.form["id"]))
         elif request.form["status"] == "join":
-            status = addUserTable(current_user.name, ObjectId(request.form["id"]))
+            status = addUserTable(
+                current_user.name, 
+                ObjectId(request.form["id"]))
     results = []
     dbresults = tables.find()
     for result in dbresults:
@@ -139,7 +145,8 @@ def list_tables():
             for user in table["people"]:
                 if user.lower() == name:
                     cur_table_num = table["number"]
-    return render_template("tables.html", 
+    return render_template(
+        "tables.html", 
         is_authed=current_user.is_authenticated(),
         results=results, 
         table_num=cur_table_num, 
@@ -152,13 +159,19 @@ def table():
     if request.method == "POST":
         total_tables = tables.find().count()
         if total_tables == MAX_TABLES:
-            return render_template("create_table.html", message="Too Many Tables")
+            return render_template(
+                "create_table.html", 
+                message="Too Many Tables")
         new_table = {}
         new_table["number"] = total_tables + 1
         new_table["people"] = []
         tables.insert(new_table)
         table = tables.find_one({ "number" : total_tables + 1 })
-        return render_template("create_table.html", message="Table " + str(total_tables + 1) + " Created")
+        return render_template(
+            "create_table.html", 
+            message="Table " + 
+                str(total_tables + 
+                    1 + " Created")
     return render_template("create_table.html")
 
 # user: String with user name
@@ -168,7 +181,8 @@ def addUserTable(name, table_id):
     if table == None:
         return False
     user_list = table["people"]
-    if name in user_list or len(user_list) == MAX_PEOPLE_PER_TABLE:
+    if name in user_list or 
+        len(user_list) == MAX_PEOPLE_PER_TABLE:
         return False
     tables.update(
         { "_id" : table_id }, 

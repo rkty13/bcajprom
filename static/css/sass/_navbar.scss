@@ -11,3 +11,13 @@ nav {
         }
     }
 }
+
+@media screen and (max-width: 480px) {
+    nav {
+        .pure-menu {
+            .pure-menu-heading {
+                display: none;
+            }
+        }
+    }
+}
