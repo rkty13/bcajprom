@@ -171,7 +171,7 @@ def table():
             "create_table.html", 
             message="Table " + 
                 str(total_tables + 
-                    1 + " Created")
+                    1) + " Created")
     return render_template("create_table.html")
 
 # user: String with user name
@@ -181,8 +181,7 @@ def addUserTable(name, table_id):
     if table == None:
         return False
     user_list = table["people"]
-    if name in user_list or 
-        len(user_list) == MAX_PEOPLE_PER_TABLE:
+    if name in user_list or len(user_list) == MAX_PEOPLE_PER_TABLE:
         return False
     tables.update(
         { "_id" : table_id }, 
