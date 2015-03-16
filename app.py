@@ -5,6 +5,8 @@ from pymongo import MongoClient
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from passlib.hash import bcrypt
 from bson.objectid import ObjectId, InvalidId
+import re
+from collections import OrderedDict
 
 app = Flask(__name__)
 app.secret_key = os.environ["APP_SECRET"]
@@ -19,7 +21,9 @@ db = client.get_default_database()
 users = db.users
 tables = db.tables
 
-MAX_TABLES = 10
+EMAIL_REGEX = re.compile("^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?bergen\.org$")
+
+MAX_TABLES = 23
 MAX_PEOPLE_PER_TABLE = 8
 
 class User(object):
@@ -57,10 +61,12 @@ def login():
     if current_user.is_authenticated() and current_user.is_active():
         return redirect("/")
     if request.method == "POST":
-        email = request.form["email"]
+        email = request.form["email"].lower()
+        if not EMAIL_REGEX.match(email):
+            return render_template("login.html", error="Please enter a valid email")
         password = request.form["password"]
         if userAuth(email, password):
-            user = users.find_one({"email" : email})
+            user = users.find_one({ "email" : re.compile(email, re.IGNORECASE) })
             login_user(User(unicode(user["_id"])))
             return redirect("/")
         else:
@@ -68,7 +74,7 @@ def login():
     return render_template("login.html")
 
 def userAuth(email, password):
-    user = users.find_one({"email" : email})
+    user = users.find_one({ "email" : re.compile(email, re.IGNORECASE) })
     if (user == None):
         return False
     return bcrypt.verify(password, user["password"])
@@ -83,7 +89,12 @@ def create():
     if request.method == "POST":
         user = {}
         user["name"] = str(request.form["name"])
-        user["email"] = str(request.form["email"])
+        if not EMAIL_REGEX.match(request.form["email"].lower()):
+            return render_template(
+                "create_account.html", 
+                message="Please enter a valid Email address"
+            )
+        user["email"] = request.form["email"].lower()
         user["password"] = hashPassword(request.form["password"])
         if users.find_one({ "email" : user["email"] }) != None:
             return render_template("create_account.html", message="Already Exists")
@@ -96,16 +107,31 @@ def hashPassword(password):
 
 @app.route("/tables", methods=["GET", "POST"])
 def list_tables():
-    results = {}
-    results = tables.find()
-    results = list(results)
-    name = current_user.name.lower()
-    table_num = -1
-    for table in results:
-        for user in table["people"]:
-            if user.lower() == name.lower():
-                table_num = table["number"]
-    return render_template("tables.html", results=results, table_num=table_num)
+    status = None
+    if request.method == "POST":
+        if request.form["status"] == "leave":
+            status = removeUserTable(current_user.name, ObjectId(request.form["id"]))
+        elif request.form["status"] == "join":
+            status = addUserTable(current_user.name, ObjectId(request.form["id"]))
+    results = []
+    dbresults = tables.find()
+    for result in dbresults:
+        results.append(result)
+    results = sorted(results)
+    cur_table_num = -1
+    if current_user.is_authenticated():
+        name = current_user.name.lower()
+        for table in results:
+            for user in table["people"]:
+                if user.lower() == name:
+                    cur_table_num = table["number"]
+    return render_template("tables.html", 
+        is_authed=current_user.is_authenticated(),
+        results=results, 
+        table_num=cur_table_num, 
+        status=status, 
+        max_people=MAX_PEOPLE_PER_TABLE
+    )
 
 @app.route("/create_table", methods=["GET", "POST"])
 def table():
@@ -118,8 +144,7 @@ def table():
         new_table["people"] = []
         tables.insert(new_table)
         table = tables.find_one({ "number" : total_tables + 1 })
-        lst = addUserTable(current_user.name, table["_id"])
-        return render_template("create_table.html", message="Table Created", lst=lst)
+        return render_template("create_table.html", message="Table " + str(total_tables + 1) + " Created")
     return render_template("create_table.html")
 
 # user: String with user name
@@ -129,7 +154,7 @@ def addUserTable(name, table_id):
     if table == None:
         return False
     user_list = table["people"]
-    if name in user_list:
+    if name in user_list or len(user_list) == MAX_PEOPLE_PER_TABLE:
         return False
     tables.update(
         { "_id" : table_id }, 

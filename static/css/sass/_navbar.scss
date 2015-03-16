@@ -1,10 +1,13 @@
 nav {
-	.pure-menu {
+    .pure-menu {
+        height: auto;
+        background-color: #222322;
 
-		.pure-menu-list {
-			.pure-menu-item {
-				height: auto;
-			}
-		}
-	}
+        .pure-menu-list {
+            .pure-menu-item {
+                padding: 1% 0;
+                height: auto;
+            }
+        }
+    }
 }

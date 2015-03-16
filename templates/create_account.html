@@ -2,7 +2,8 @@
 
 {% block body %}
 	<div class="container">
-		<form method="POST" action="/create_account">
+        {{ message }}
+		<form method="POST" action="/create_account" class="pure-form pure-form-stacked">
 			<input type="text" name="name" placeholder="Name">
 			<input type="text" name="email" placeholder="Bergen Email">
 			<input type="password" name="password" placeholder="Password">

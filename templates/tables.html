@@ -2,7 +2,6 @@
 
 {% block body %}
 	<div class="container">	
-		{{ name }}
 		<div class="pure-g">
 			{% for table in results %}
 				<div class="pure-u-1-4">
@@ -16,17 +15,23 @@
 							{% endfor %}
 						</tbody>
 					</table>
-					{% if table["number"] == table_num %}
-						<form method="POST" action="/tables">
-							<input type="hidden" name="leave_table" value="{{ table['_id'] }}">
-							<button type="submit" class="pure-button pure-button-primary">Leave Table</button>
-						</form>
-					{% elif table_num == -1 %}
-						<form method="POST" action="/tables">
-							<input type="hidden" name="join_table" value="{{ table['_id'] }}">
-							<button type="submit" class="pure-button pure-button-primary">Join Table</button>
-						</form>
-					{% endif %}
+                    {% if is_authed %}
+                        {% if table["people"]|length <= max_people %}
+        					{% if table["number"] == table_num %}
+        						<form method="POST" action="/tables">
+                                    <input type="hidden" name="status" value="leave">
+        							<input type="hidden" name="id" value="{{ table['_id'] }}">
+        							<button type="submit" class="pure-button pure-button-primary">Leave Table</button>
+        						</form>
+        					{% elif table_num == -1 %}
+        						<form method="POST" action="/tables">
+                                    <input type="hidden" name="status" value="join">
+        							<input type="hidden" name="id" value="{{ table['_id'] }}">
+        							<button type="submit" class="pure-button pure-button-primary">Join Table</button>
+        						</form>
+        					{% endif %}
+                        {% endif %}
+                    {% endif %}
 				</div>
 			{% endfor %}
 		</div>
