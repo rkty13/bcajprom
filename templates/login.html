@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block body %}
-	{{ error }}
 	<div class="container" id="login">
         <h1>Login</h1>
+        {% if error %}
+			<div class="app-msg error">{{ error }}</div>
+		{% endif %}
 		<form method="POST" action="/login" class="pure-form pure-form-stacked">
 			<input type="text" name="email" placeholder="Bergen Email">
 			<input type="password" name="password" placeholder="Password">

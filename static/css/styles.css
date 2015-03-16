@@ -45,14 +45,17 @@ nav .pure-menu {
     height: auto; }
 
 #tables .jtable {
-  padding: 10px 0; }
+  padding: 1em 0; }
   #tables .jtable table {
-    margin: 0 auto; }
+    margin: 0 auto;
+    width: 95%; }
+    #tables .jtable table .header_row {
+      text-align: center; }
     #tables .jtable table .person_row {
       text-align: center; }
 #tables form {
   text-align: center;
-  padding-top: 10px; }
+  padding-top: 1em; }
 
 #login {
   text-align: center; }

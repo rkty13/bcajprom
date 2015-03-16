@@ -8,9 +8,13 @@
         {% endif %}
 		<div class="pure-g">
 			{% for table in results %}
-				<div class="jtable pure-u-1 pure-u-sm-1-2 pure-u-md-1-4">
+				<div class="jtable pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-5">
 					<table class="pure-table">
-						<thead><tr><th>Table Number {{ table["number"] }}</th></tr></thead>
+						<thead>
+                            <tr class="header_row">
+                                <th>Table Number {{ table["number"] }}</th>
+                            </tr>
+                        </thead>
 						<tbody>
 							{% for person in table["people"] %}
 								<tr class="person_row">
