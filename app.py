@@ -59,7 +59,7 @@ def login():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
-        if (userAuth(email, password)):
+        if userAuth(email, password):
             user = users.find_one({"email" : email})
             login_user(User(unicode(user["_id"])))
             return redirect("/")
