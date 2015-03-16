@@ -6,7 +6,6 @@ from flask.ext.login import LoginManager, login_user, logout_user, current_user,
 from passlib.hash import bcrypt
 from bson.objectid import ObjectId, InvalidId
 import re
-from collections import OrderedDict
 
 app = Flask(__name__)
 app.secret_key = os.environ["APP_SECRET"]
@@ -92,12 +91,18 @@ def create():
         if not EMAIL_REGEX.match(request.form["email"].lower()):
             return render_template(
                 "create_account.html", 
-                message="Please enter a valid Email address"
-            )
+                message="Please enter a valid email address")
+
+        if users.find_one({ "email" : re.compile(request.form["email"], re.IGNORECASE) }) != None:
+            return render_template("create_account.html", 
+                message="Account with email already exists")
         user["email"] = request.form["email"].lower()
+        
+        if not request.form["password"] == request.form["verify_password"]:
+            return render_template("create_account.html", 
+                message="Password verification failed")
+
         user["password"] = hashPassword(request.form["password"])
-        if users.find_one({ "email" : user["email"] }) != None:
-            return render_template("create_account.html", message="Already Exists")
         users.insert(user)
         return render_template("create_account.html", message="User Created")
     return render_template("create_account.html")

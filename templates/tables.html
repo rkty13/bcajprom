@@ -4,7 +4,7 @@
 	<div class="container">	
 		<div class="pure-g">
 			{% for table in results %}
-				<div class="pure-u-1-4">
+				<div class="jtable pure-u-1 pure-u-sm-1-2 pure-u-md-1-4">
 					<table class="pure-table">
 						<thead><tr><th>Table Number {{ table["number"] }}</th></tr></thead>
 						<tbody>
@@ -21,13 +21,13 @@
         						<form method="POST" action="/tables">
                                     <input type="hidden" name="status" value="leave">
         							<input type="hidden" name="id" value="{{ table['_id'] }}">
-        							<button type="submit" class="pure-button pure-button-primary">Leave Table</button>
+        							<button type="submit" class="pure-button pure-button-primary">Leave Table {{ table["number"] }}</button>
         						</form>
         					{% elif table_num == -1 %}
         						<form method="POST" action="/tables">
                                     <input type="hidden" name="status" value="join">
         							<input type="hidden" name="id" value="{{ table['_id'] }}">
-        							<button type="submit" class="pure-button pure-button-primary">Join Table</button>
+        							<button type="submit" class="pure-button pure-button-primary">Join Table {{ table["number"] }}</button>
         						</form>
         					{% endif %}
                         {% endif %}

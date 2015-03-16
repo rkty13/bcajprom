@@ -1,9 +1,19 @@
-@import url(_normalize.css);
+@import url(normalize.css);
 nav .pure-menu {
   height: auto;
   background-color: #222322; }
   nav .pure-menu .pure-menu-list .pure-menu-item {
     padding: 1% 0;
     height: auto; }
+
+.container {
+  padding: 10%; }
+  .container .jtable {
+    padding: 10px 0; }
+    .container .jtable table {
+      margin: 0 auto; }
+  .container form {
+    text-align: center;
+    padding-top: 10px; }
 
 /*# sourceMappingURL=styles.css.map */

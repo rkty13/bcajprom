@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "AAAQ,2BAAgB;ACCpB,cAAW;EACP,MAAM,EAAE,IAAI;EACZ,gBAAgB,EAAE,OAAO;EAGrB,8CAAgB;IACZ,OAAO,EAAE,IAAI;IACb,MAAM,EAAE,IAAI",
-"sources": ["sass/styles.scss","sass/_navbar.scss"],
+"mappings": "AAAQ,0BAAe;ACCnB,cAAW;EACP,MAAM,EAAE,IAAI;EACZ,gBAAgB,EAAE,OAAO;EAGrB,8CAAgB;IACZ,OAAO,EAAE,IAAI;IACb,MAAM,EAAE,IAAI;;ACR5B,UAAW;EACP,OAAO,EAAE,GAAG;EAEZ,kBAAQ;IACJ,OAAO,EAAE,MAAM;IAEf,wBAAM;MACF,MAAM,EAAE,MAAM;EAItB,eAAK;IACD,UAAU,EAAE,MAAM;IAClB,WAAW,EAAE,IAAI",
+"sources": ["sass/styles.scss","sass/_navbar.scss","sass/_tables.scss"],
 "names": [],
 "file": "styles.css"
 }
