@@ -1,0 +1,47 @@
+.container {
+    padding: 5% 10%;
+    text-align: center;
+
+    form {
+        input {
+            margin: 0 auto !important;
+            margin-bottom: 1em !important;
+        }
+    }
+}
+
+h1 {
+    font-size: 64px;
+}
+
+.button-xsmall {
+    font-size: 70%;
+}
+
+.button-small {
+    font-size: 85%;
+}
+
+.button-large {
+    font-size: 110%;
+}
+
+.button-xlarge {
+    font-size: 125%;
+}
+
+.app-msg {
+    color: white;
+    border-radius: 4px;
+    display: inline-block;
+    padding: 0.5em;
+    margin-bottom: 1em;
+
+    &.success {
+        background: rgb(28, 184, 65);
+    }
+
+    &.error {
+        background: rgb(202, 60, 60);
+    }
+}

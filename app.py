@@ -23,7 +23,7 @@ tables = db.tables
 EMAIL_REGEX = re.compile("^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?bergen\.org$")
 
 MAX_TABLES = 23
-MAX_PEOPLE_PER_TABLE = 8
+MAX_PEOPLE_PER_TABLE = 12
 
 class User(object):
 
@@ -62,14 +62,16 @@ def login():
     if request.method == "POST":
         email = request.form["email"].lower()
         if not EMAIL_REGEX.match(email):
-            return render_template("login.html", error="Please enter a valid email")
+            return render_template("login.html", 
+                error="Please enter a valid email")
         password = request.form["password"]
         if userAuth(email, password):
             user = users.find_one({ "email" : re.compile(email, re.IGNORECASE) })
             login_user(User(unicode(user["_id"])))
             return redirect("/")
         else:
-            return render_template("login.html", error="Wrong email or password")
+            return render_template("login.html", 
+                error="Wrong email or password")
     return render_template("login.html")
 
 def userAuth(email, password):
@@ -81,30 +83,37 @@ def userAuth(email, password):
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
     logout_user()
-    return redirect("/login")
+    return redirect("/")
 
 @app.route("/create_account", methods=["GET", "POST"])
 def create():
     if request.method == "POST":
         user = {}
-        user["name"] = str(request.form["name"])
+        if not (request.form["name"] and 
+                request.form["email"] and 
+                request.form["password"] and 
+                request.form["verify_password"]):
+            return render_template(
+                "create_account.html",
+                error="Please fill out all fields")
+        user["name"] = request.form["name"]
         if not EMAIL_REGEX.match(request.form["email"].lower()):
             return render_template(
                 "create_account.html", 
-                message="Please enter a valid email address")
+                error="Please enter a valid email address")
 
         if users.find_one({ "email" : re.compile(request.form["email"], re.IGNORECASE) }) != None:
             return render_template("create_account.html", 
-                message="Account with email already exists")
+                error="Account with email already exists")
         user["email"] = request.form["email"].lower()
         
         if not request.form["password"] == request.form["verify_password"]:
             return render_template("create_account.html", 
-                message="Password verification failed")
+                error="Password verification failed")
 
         user["password"] = hashPassword(request.form["password"])
         users.insert(user)
-        return render_template("create_account.html", message="User Created")
+        return render_template("create_account.html", success="User Created!")
     return render_template("create_account.html")
 
 def hashPassword(password):

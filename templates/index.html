@@ -1,5 +1,16 @@
 {% extends "base.html" %}
 
 {% block body %}
-	
+	<div class="container" id="index">
+        <h1 id="header">BCA JProm 2016</h1>
+        <h2>Stay tuned for more updates!</h2>
+        <div class="button-container">
+            <a href="/tables" class="pure-button pure-button-primary button-xlarge">View and edit tables</a>
+        </div>
+        {% if not current_user.is_authenticated() %}
+            <div class="button-container">
+                <a href="/login" class="pure-button pure-button-primary button-xlarge">Log In Here!</a>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

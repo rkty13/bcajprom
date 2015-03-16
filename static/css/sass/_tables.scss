@@ -1,11 +1,13 @@
-.container {
-    padding: 10%;
-
+#tables {
     .jtable {
         padding: 10px 0;
 
         table {
             margin: 0 auto;
+
+            .person_row {
+                text-align: center;
+            }
         }
     }
 

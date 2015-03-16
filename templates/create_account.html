@@ -1,8 +1,13 @@
 {% extends "base.html" %}
 
 {% block body %}
-	<div class="container">
-        {{ message }}
+	<div class="container" id="create_account">
+        <h1>Create Account</h1>
+        {% if error %}
+        	<div class="app-msg error">{{ error }}</div>
+        {% elif success %}
+        	<div class="app-msg success">{{ success }}</div>
+        {% endif %}
 		<form method="POST" action="/create_account" class="pure-form pure-form-stacked">
 			<input type="text" name="name" placeholder="Name">
 			<input type="text" name="email" placeholder="Bergen Email">

@@ -1,4 +1,42 @@
 @import url(normalize.css);
+.container {
+  padding: 5% 10%;
+  text-align: center; }
+  .container form input {
+    margin: 0 auto !important;
+    margin-bottom: 1em !important; }
+
+h1 {
+  font-size: 64px; }
+
+.button-xsmall {
+  font-size: 70%; }
+
+.button-small {
+  font-size: 85%; }
+
+.button-large {
+  font-size: 110%; }
+
+.button-xlarge {
+  font-size: 125%; }
+
+.app-msg {
+  color: white;
+  border-radius: 4px;
+  display: inline-block;
+  padding: 0.5em;
+  margin-bottom: 1em; }
+  .app-msg.success {
+    background: #1cb841; }
+  .app-msg.error {
+    background: #ca3c3c; }
+
+#index #header {
+  font-size: 72px; }
+#index .button-container {
+  margin-bottom: 1em; }
+
 nav .pure-menu {
   height: auto;
   background-color: #222322; }
@@ -6,14 +44,17 @@ nav .pure-menu {
     padding: 1% 0;
     height: auto; }
 
-.container {
-  padding: 10%; }
-  .container .jtable {
-    padding: 10px 0; }
-    .container .jtable table {
-      margin: 0 auto; }
-  .container form {
-    text-align: center;
-    padding-top: 10px; }
+#tables .jtable {
+  padding: 10px 0; }
+  #tables .jtable table {
+    margin: 0 auto; }
+    #tables .jtable table .person_row {
+      text-align: center; }
+#tables form {
+  text-align: center;
+  padding-top: 10px; }
+
+#login {
+  text-align: center; }
 
 /*# sourceMappingURL=styles.css.map */

@@ -1,6 +1,5 @@
 <html>
 	<head>
-		<link rel="stylesheet" href="/static/css/styles.css">
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
         <!--[if lte IE 8]>
             <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css">
@@ -8,6 +7,7 @@
         <!--[if gt IE 8]><!-->
             <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
         <!--<![endif]-->
+        <link rel="stylesheet" href="/static/css/styles.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		{% block header %}{% endblock %}
 	</head>
@@ -35,7 +35,7 @@
 					{% endif %}
 				</ul>
 			</div>
-		<nav>
+		</nav>
 		{% block body %}{% endblock %}
 	</body>
 

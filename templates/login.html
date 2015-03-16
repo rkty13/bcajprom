@@ -2,12 +2,14 @@
 
 {% block body %}
 	{{ error }}
-	<div class="container">
+	<div class="container" id="login">
+        <h1>Login</h1>
 		<form method="POST" action="/login" class="pure-form pure-form-stacked">
 			<input type="text" name="email" placeholder="Bergen Email">
 			<input type="password" name="password" placeholder="Password">
 			<button type="submit" class="pure-button pure-button-primary">Log In</button>
 		</form>
+		<h2>If you have not already made an account, create one here:</h2>
 		<a href="/create_account"><button class="pure-button pure-button-primary">Create Account</button></a>
 	</div>
 {% endblock %}
