@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block body %}
+	{{ message }}
+	{{ lst }}
+	<div class="container">
+		<form method="POST" action="/create_table">
+			<button type="submit">Create Table</button>
+		</form>
+	</div>
+{% endblock %}

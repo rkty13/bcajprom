@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block body %}
+	<div class="container">	
+		{{ name }}
+		<div class="pure-g">
+			{% for table in results %}
+				<div class="pure-u-1-4">
+					<table class="pure-table">
+						<thead><tr><th>Table Number {{ table["number"] }}</th></tr></thead>
+						<tbody>
+							{% for person in table["people"] %}
+								<tr>
+									<td>{{ person }}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					{% if table["number"] == table_num %}
+						<form method="POST" action="/tables">
+							<input type="hidden" name="leave_table" value="{{ table['_id'] }}">
+							<button type="submit" class="pure-button pure-button-primary">Leave Table</button>
+						</form>
+					{% elif table_num == -1 %}
+						<form method="POST" action="/tables">
+							<input type="hidden" name="join_table" value="{{ table['_id'] }}">
+							<button type="submit" class="pure-button pure-button-primary">Join Table</button>
+						</form>
+					{% endif %}
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}

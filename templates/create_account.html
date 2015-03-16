@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block body %}
+	<div class="container">
+		<form method="POST" action="/create_account">
+			<input type="text" name="name" placeholder="Name">
+			<input type="text" name="email" placeholder="Bergen Email">
+			<input type="password" name="password" placeholder="Password">
+			<button type="submit" class="pure-button pure-button-primary">Create Account</button>
+		</form>
+	</div>
+{% endblock %}
