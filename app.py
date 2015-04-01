@@ -29,7 +29,7 @@ SENDGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
 sg = sendgrid.SendGridClient(SENDGRID_API_USER, SENDGRID_API_KEY)
 
 MAX_TABLES = 23
-MAX_PEOPLE_PER_TABLE = 12
+MAX_PEOPLE_PER_TABLE = 10
 
 class User(object):
 
