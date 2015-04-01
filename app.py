@@ -197,6 +197,8 @@ def list_tables():
         results.append(result)
     results = sorted(results)
     cur_table_num = -1
+
+    max_people = MAX_PEOPLE_PER_TABLE
     
     if current_user.is_authenticated():
         name = current_user.first_name.lower() + " " + current_user.last_name.lower()
@@ -204,10 +206,9 @@ def list_tables():
             for user in table["people"]:
                 if user["name"].lower() == name:
                     cur_table_num = table["number"]
-    person = users.find_one({ "_id" : ObjectId(current_user.get_id()) })
-    max_people = MAX_PEOPLE_PER_TABLE
-    if person["guest"]:
-        max_people -= 1
+        person = users.find_one({ "_id" : ObjectId(current_user.get_id()) })
+        if person["guest"]:
+            max_people -= 1
     
     return render_template(
         "tables.html", 
