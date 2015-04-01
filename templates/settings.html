@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <div class="container" id="create_account">
+        <h1>Settings</h1>
+        {% if error %}
+            <div class="app-msg error">{{ error }}</div>
+        {% elif success %}
+            <div class="app-msg success">{{ success }}</div>
+        {% endif %}
+        <form method="POST" action="/settings" class="pure-form pure-form-stacked">
+            <input type="checkbox" name="guest" {% if person['guest'] %}checked{% endif %}>
+            <label for="guest">Bringing guest?</label>
+            <button type="submit" class="pure-button pure-button-primary">Save</button>
+        </form>
+    </div>
+{% endblock %}

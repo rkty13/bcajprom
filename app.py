@@ -129,6 +129,13 @@ def create():
 
         user["password"] = hashPassword(request.form["password"])
         user["confirmed"] = False
+
+        guest = False
+        if len(request.form.getlist('guest')) > 0:
+            guest = True
+        else:
+            guest = False
+        user["guest"] = guest
         users.insert(user)
         email_user = users.find_one({ "email" : re.compile(request.form["email"], re.IGNORECASE) })
         email(email_user["email"], 
@@ -197,6 +204,10 @@ def list_tables():
             for user in table["people"]:
                 if user["name"].lower() == name:
                     cur_table_num = table["number"]
+    person = users.find_one({ "_id" : ObjectId(current_user.get_id()) })
+    max_people = MAX_PEOPLE_PER_TABLE
+    if person["guest"]:
+        max_people -= 1
     
     return render_template(
         "tables.html", 
@@ -204,7 +215,7 @@ def list_tables():
         results=results, 
         table_num=cur_table_num, 
         status=status, 
-        max_people=MAX_PEOPLE_PER_TABLE
+        max_people=max_people
     )
 
 @app.route("/create_table", methods=["GET", "POST"])
@@ -238,7 +249,10 @@ def addUserTable(person, table_id):
     if table == None:
         return False
     user_list = table["people"]
-    if len(user_list) == MAX_PEOPLE_PER_TABLE:
+    new_max = MAX_PEOPLE_PER_TABLE
+    if person["guest"]:
+        new_max -= 1
+    if len(user_list) == new_max:
         return False
 
     for user in user_list:
@@ -250,6 +264,12 @@ def addUserTable(person, table_id):
         { "$push" : { "people" : { "name" : name, "email" : person["email"] } } },
         upsert=False
     )
+    if person["guest"]:
+        tables.update(
+            { "_id" : table_id }, 
+            { "$push" : {"people" : {"name" : name + "'s Guest", "email" : person["email"] + ":guest" } } },
+            upsert=False
+        )
     return True
 
 def removeUserTable(person, table_id):
@@ -269,6 +289,13 @@ def removeUserTable(person, table_id):
         { "$pull" : { "people" : { "name" : name, "email" : person["email"] } } },
         upsert=False
     )
+
+    if person["guest"]:
+        tables.update(
+            { "_id" : table_id },
+            { "$pull" : { "people" : { "name" : name + "'s Guest", "email" : person["email"] + ":guest" } } },
+            upsert=False
+        )
     return True
 
 @app.route("/confirm/<id>")
@@ -288,6 +315,27 @@ def confirm(id):
     except:
         abort(404)
     return render_template("confirm.html")
+
+# @app.route("/settings", methods=['GET', 'POST'])
+# @login_required
+# def settings():
+#     oid = ObjectId(current_user.get_id())
+#     person = users.find_one({ "_id" : oid })
+#     if person == None:
+#         abort(404)
+#     if request.method == 'POST':
+#         guest = False
+#         if len(request.form.getlist('guest')) > 0:
+#             guest = True
+#         else:
+#             guest = False
+#         users.update(
+#             { "_id" : oid },
+#             { "$set" : { "guest" : guest } },
+#             upsert=False)
+#         person = users.find_one({ "_id" : oid })
+#         return render_template("settings.html", person=person, success="Saved!")
+#     return render_template("settings.html", person=person)
 
 @app.route("/")
 def index():
