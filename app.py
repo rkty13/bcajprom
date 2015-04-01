@@ -310,7 +310,7 @@ def confirm(id):
             { "_id" : oid },
             { "$set" : { "confirmed" : True } },
             upsert=False)
-        redirect("/login")
+        return redirect("/login")
     except InvalidId as error:
         abort(404)
     except:
