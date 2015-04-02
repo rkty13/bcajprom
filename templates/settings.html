@@ -8,9 +8,11 @@
         {% elif success %}
             <div class="app-msg success">{{ success }}</div>
         {% endif %}
+        <p class="app-msg error">
+            WARNING: Changing your guest setting will remove you from your table. Please go back and rejoin the table you were previously in.</p>
+        </p>
         <form method="POST" action="/settings" class="pure-form pure-form-stacked">
-            <input type="checkbox" name="guest" {% if person['guest'] %}checked{% endif %}>
-            <label for="guest">Bringing guest?</label>
+            <label for="guest"><input type="checkbox" name="guest" {% if person['guest'] %}checked{% endif %}> Bringing guest?</label>
             <button type="submit" class="pure-button pure-button-primary">Save</button>
         </form>
     </div>

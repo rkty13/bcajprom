@@ -65,10 +65,4 @@ nav .pure-menu {
 #login {
   text-align: center; }
 
-#create_account #guest_label {
-  display: inline-block; }
-#create_account button {
-  display: block;
-  margin: 0 auto; }
-
 /*# sourceMappingURL=styles.css.map */

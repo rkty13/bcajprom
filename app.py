@@ -108,8 +108,8 @@ def create():
             return render_template(
                 "create_account.html",
                 error="Please fill out all fields")
-        user["first_name"] = request.form["first_name"]
-        user["last_name"] = request.form["last_name"]
+        user["first_name"] = request.form["first_name"].strip(" ")
+        user["last_name"] = request.form["last_name"].strip(" ")
 
         if not EMAIL_REGEX.match(request.form["email"].lower()):
             return render_template(
@@ -120,7 +120,7 @@ def create():
             return render_template(
                 "create_account.html", 
                 error="Account with email already exists")
-        user["email"] = request.form["email"].lower()
+        user["email"] = request.form["email"].lower().strip(" ")
         
         if not request.form["password"] == request.form["verify_password"]:
             return render_template(
@@ -317,26 +317,46 @@ def confirm(id):
         abort(404)
     return render_template("confirm.html")
 
-# @app.route("/settings", methods=['GET', 'POST'])
-# @login_required
-# def settings():
-#     oid = ObjectId(current_user.get_id())
-#     person = users.find_one({ "_id" : oid })
-#     if person == None:
-#         abort(404)
-#     if request.method == 'POST':
-#         guest = False
-#         if len(request.form.getlist('guest')) > 0:
-#             guest = True
-#         else:
-#             guest = False
-#         users.update(
-#             { "_id" : oid },
-#             { "$set" : { "guest" : guest } },
-#             upsert=False)
-#         person = users.find_one({ "_id" : oid })
-#         return render_template("settings.html", person=person, success="Saved!")
-#     return render_template("settings.html", person=person)
+@app.route("/settings", methods=['GET', 'POST'])
+@login_required
+def settings():
+    oid = ObjectId(current_user.get_id())
+    person = users.find_one({ "_id" : oid })
+    if person == None:
+        abort(404)
+    if request.method == 'POST':
+        update = False
+        guest = False
+        if len(request.form.getlist('guest')) > 0:
+            guest = True
+        else:
+            guest = False
+        if person["guest"] != guest:
+            name = person["first_name"] + " " + person["last_name"]
+            table = tables.find_one(
+                { "people" : { "name" : name, "email" : person["email"] } 
+            })
+            if table != None:
+                table_id = ObjectId(table["_id"])
+                tables.update(
+                    { "_id" : table_id },
+                    { "$pull" : { "people" : { "name" : name, "email" : person["email"] } } },
+                    upsert=False
+                )
+                if person["guest"]:
+                    tables.update(
+                        { "_id" : table_id },
+                        { "$pull" : { "people" : { "name" : name + "'s Guest", "email" : person["email"] + ":guest" } } },
+                        upsert=False
+                    )
+        users.update(
+            { "_id" : oid },
+            { "$set" : { "guest" : guest } },
+            upsert=False)
+        person = users.find_one({ "_id" : oid })
+
+        return render_template("settings.html", person=person, success="Saved!")
+    return render_template("settings.html", person=person)
 
 @app.route("/")
 def index():

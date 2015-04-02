@@ -25,6 +25,9 @@
                         <a href="/tables" class="pure-menu-link">Tables</a>
                     </li>
 					{% if current_user.is_authenticated() %}
+                        <li class="pure-menu-item">
+                            <a href="/settings" class="pure-menu-link">Settings</a>
+                        </li>
 						<li class="pure-menu-item">
 							<a href="/logout" class="pure-menu-link">Logout</a>
 						</li>
