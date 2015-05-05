@@ -23,7 +23,7 @@
 							{% endfor %}
 						</tbody>
 					</table>
-                    {% if is_authed %}
+                    {% if is_authed and not disable_change %}
                         {% if table["people"]|length <= max_people %}
         					{% if table["number"] == table_num %}
         						<form method="POST" action="/tables">

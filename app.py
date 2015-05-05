@@ -30,6 +30,7 @@ sg = sendgrid.SendGridClient(SENDGRID_API_USER, SENDGRID_API_KEY)
 
 MAX_TABLES = 27
 MAX_PEOPLE_PER_TABLE = 10
+DISABLE_CHANGE = True
 
 class User(object):
 
@@ -216,7 +217,8 @@ def list_tables():
         results=results, 
         table_num=cur_table_num, 
         status=status, 
-        max_people=max_people
+        max_people=max_people,
+        disable_change=DISABLE_CHANGE
     )
 
 @app.route("/create_table", methods=["GET", "POST"])
@@ -239,8 +241,16 @@ def table():
             message="Table " + 
                 str(total_tables + 
                     1) + " Created")
-    
+
     return render_template("create_table.html")
+
+@app.route("/stats")
+def stats():
+    dbtables = tables.find()
+    total = 0
+    for table in dbtables:
+        total += len(table["people"])
+    return str(total);
 
 # user: String with user name
 # table_id: id of table in tables collection
